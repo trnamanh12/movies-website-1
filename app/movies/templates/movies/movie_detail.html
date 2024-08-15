@@ -1,3 +1,4 @@
+<!-- project/movies/templates/movies/movie_detail.html -->
 {% extends "base.html" %}
 
 {% block title %}{{ movie.title }}{% endblock %}
@@ -13,32 +14,47 @@
     <p><strong>Revenue:</strong> ${{ movie.revenue }}</p>
     
     <h2>Screenings</h2>
-    <ul>
-        {% for screening in screenings %}
-            <li>{{ screening.cinema.name }} - {{ screening.date_time }}</li>
-        {% endfor %}
-    </ul>
-    
+    {% if screenings %}
+        <ul>
+            {% for screening in screenings %}
+                <li>{{ screening.cinema.name }} - {{ screening.date_time }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No screenings available.</p>
+    {% endif %}
+
     <h2>Reviews</h2>
-    <ul>
-        {% for review in reviews %}
-            <li>
-                <strong>{{ review.user.username }}</strong> rated it {{ review.rating }}/10
-                <p>{{ review.comment }}</p>
-                <p><em>{{ review.created_at }}</em></p>
-            </li>
-        {% endfor %}
-    </ul>
-    
-    <h2>Recommendations Movies</h2>
-    <ul>
-        {% for movie in recommended_movies %}
-            <li>
-                <a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a>
-                <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="100">
-            </li>
-        {% endfor %}
-    </ul>
+    {% if reviews %}
+        <ul>
+            {% for review in reviews %}
+                <li>
+                    <strong>{{ review.user.username }}</strong> rated it {{ review.rating }}/10
+                    <p>{{ review.comment }}</p>
+                    <p><em>{{ review.created_at }}</em></p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No reviews available.</p>
+    {% endif %}
+
+    <h2>Recommended Movies</h2>
+    {% if recommended_movies %}
+        <ul>
+            {% for recommended_movie in recommended_movies %}
+                <li>
+                    <a href="{% url 'movie_detail' recommended_movie.id %}">
+                        {{ recommended_movie.title }}
+                    </a>
+                    <img src="{{ base_image_url }}{{ recommended_movie.image }}" alt="{{ recommended_movie.title }}" width="100">
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No recommendations available.</p>
+    {% endif %}
+
 
     <h2>Add your review</h2>
     <form method="post" action="{% url 'add_review' movie.id %}">

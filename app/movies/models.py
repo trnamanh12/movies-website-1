@@ -28,7 +28,7 @@ class Movie(models.Model):
 
     def load_model_and_data(self) -> Tuple[pd.DataFrame, TfidfVectorizer, pd.Series]:
         try:
-            idx_title = pd.read_csv('./data/indexed_movies.csv', index_col=0)
+            idx_title = pd.read_csv('./data/index_tilte.csv', index_col=0)
             with open('./model_rm/tfidf.pkl', 'rb') as f:
                 tfidf = pickle.load(f)
             movie2idx = pd.Series(idx_title.index, index=idx_title['title'])
@@ -51,8 +51,9 @@ class Movie(models.Model):
             idx = idx.iloc[0]
 
         try:
-            result = (-(cosine_similarity(model[idx], model).flatten())).argsort()[1:10]
-            result_titles = data['title'].iloc[result].tolist()
+            similarity_scores = cosine_similarity(model[idx:idx+1], model).flatten()
+            similar_indices = similarity_scores.argsort()[::-1][1:8]
+            result_titles = data['title'].iloc[similar_indices].tolist()
             for title in result_titles:
                 movie = Movie.objects.filter(title=title).first()
                 if movie:
