@@ -5,4 +5,14 @@ typing_extensions==4.12.2
 drf-spectacular==0.27.2
 psycopg==3.2.1
 psycopg-binary==3.2.1
-Pillow
+geopandas==0.14.4
+pandas==2.2.2
+pandas-datareader==0.10.0
+pandas-profiling==3.6.6
+pandas-summary==0.2.0
+pandasql==0.7.3
+sklearn-pandas==2.2.0
+hpsklearn==0.1.0
+sklearn-pandas==2.2.0
+cloudpickle==2.2.1
+pickleshare @ file:///home/conda/feedstock_root/build_artifacts/pickleshare_1602536217715/work

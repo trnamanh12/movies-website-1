@@ -30,6 +30,16 @@
         {% endfor %}
     </ul>
     
+    <h2>Recommendations Movies</h2>
+    <ul>
+        {% for movie in recommended_movies %}
+            <li>
+                <a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a>
+                <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="100">
+            </li>
+        {% endfor %}
+    </ul>
+
     <h2>Add your review</h2>
     <form method="post" action="{% url 'add_review' movie.id %}">
         {% csrf_token %}
