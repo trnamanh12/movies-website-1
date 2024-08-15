@@ -34,11 +34,13 @@ def movie_detail(request: 'HttpRequest', movie_id: int) -> 'HttpResponse':
     screenings = movie.screenings.select_related('cinema').order_by('date_time')
     reviews = movie.reviews.select_related('user').order_by('-created_at')
     base_image_url = 'https://image.tmdb.org/t/p/w500'
+    recommended_movies = movie.get_recommendations()
     return render(request, 'movies/movie_detail.html', {
         'movie': movie,
         'screenings': screenings,
         'reviews': reviews,
         'base_image_url': base_image_url,
+        'recommended_movies': recommended_movies,
     })
 
 @login_required

@@ -1,6 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
+import pickle
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
+from typing import List, Tuple
 
 class Movie(models.Model):
     title = models.CharField(max_length=200)
@@ -15,12 +20,50 @@ class Movie(models.Model):
     keywords = models.CharField(max_length=200, default='')
 
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
 
-    def get_recommendations(self):
-        # return Movie.objects.exclude(id=self.id).order_by('-vote_average')[:5]
-        pass
+    def find_index(self, name: str, movie2idx: pd.Series) -> int:
+        return movie2idx.get(name, -1) # return -1 if not found
+
+    def load_model_and_data(self) -> Tuple[pd.DataFrame, TfidfVectorizer, pd.Series]:
+        try:
+            idx_title = pd.read_csv('./data/index_tilte.csv', index_col=0)
+            with open('./model_rm/tfidf.pkl', 'rb') as f:
+                tfidf = pickle.load(f)
+            movie2idx = pd.Series(idx_title.index, index=idx_title['title'])
+            return idx_title, tfidf, movie2idx
+        except Exception as e:
+            print(f"Error loading model and data: {e}")
+            return pd.DataFrame(), None, pd.Series()
+
+    def get_recommendations(self) -> List['Movie']:
+        list_movies = []
+        data, model, movie2idx = self.load_model_and_data()
+        if model is None or data.empty:
+            return list_movies
+
+        idx = self.find_index(self.title, movie2idx)
+        if idx == -1:
+            return list_movies
+
+        if isinstance(idx, pd.Series):
+            idx = idx.iloc[0]
+
+        try:
+            similarity_scores = cosine_similarity(model[idx:idx+1], model).flatten()
+            similar_indices = similarity_scores.argsort()[::-1][1:8]
+            result_titles = data['title'].iloc[similar_indices].tolist()
+            for title in result_titles:
+                movie = Movie.objects.filter(title=title).first()
+                if movie:
+                    list_movies.append(movie)
+        except Exception as e:
+            print(f"Error getting recommendations: {e}")
+
+        return list_movies
+
+
 
 class Review(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews') 
