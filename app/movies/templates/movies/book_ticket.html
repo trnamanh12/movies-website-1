@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Book Ticket</h1>
+<h2>{{ screening.movie.title }}</h2>
+<p>Cinema: {{ screening.cinema.name }}</p>
+<p>Date and Time: {{ screening.date_time }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Book Ticket</button>
+</form>
+{% endblock %}

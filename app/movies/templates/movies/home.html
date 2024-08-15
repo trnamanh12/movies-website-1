@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Welcome to the Movie Booking System</h1>
+<p>Discover and book tickets for your favorite movies at the best cinemas in town.</p>
+<h2>Featured Movies</h2>
+<div class="featured-movies">
+    {% for movie in featured_movies %}
+    <div class="movie-item">
+        <h3><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></h3>
+        <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="200">
+        <p>Release Year: {{ movie.release_date.year }}</p>
+        <p>Rating: {{ movie.vote_average }}</p>
+    </div>
+    {% empty %}
+    <p>No featured movies available.</p>
+    {% endfor %}
+</div>
+<h2>Top Cinemas</h2>
+<ul>
+    {% for cinema in top_cinemas %}
+    <li><a href="{% url 'cinema_detail' cinema.id %}">{{ cinema.name }}</a></li>
+    {% empty %}
+    <li>No cinemas available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

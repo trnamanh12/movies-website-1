@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="get" action="{% url 'search' %}">
+    <input type="text" name="q" placeholder="Search for movies..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+<h1>Movies</h1>
+<div class="movie-list">
+    {% for movie in movies %}
+    <div class="movie-item">
+        <h2><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></h2>
+        <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="200">
+        <p><strong>Year</strong> : {{ movie.release_date.year }}</p>
+        <p><strong>Rating</strong> : {{ movie.vote_average }}</p>
+    </div>
+    {% empty %}
+    <p>No movies available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

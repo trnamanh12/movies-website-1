@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Search Results</h1>
+{% if movies %}
+    <h2>Movies</h2>
+    <ul>
+    {% for movie in movies %}
+        <li><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% if cinemas %}
+    <h2>Cinemas</h2>
+    <ul>
+    {% for cinema in cinemas %}
+        <li><a href="{% url 'cinema_detail' cinema.id %}">{{ cinema.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endblock %}

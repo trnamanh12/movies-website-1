@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Cinemas</h1>
+<ul>
+    {% for cinema in cinemas %}
+    <li><a href="{% url 'cinema_detail' cinema.id %}">{{ cinema.name }}</a></li>
+    {% empty %}
+    <li>No cinemas available.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

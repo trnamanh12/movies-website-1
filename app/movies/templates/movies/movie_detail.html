@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ movie.title }}</h1>
+    <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="300">
+    <p><strong>Overview:</strong> {{ movie.overview }}</p>
+    <p><strong>Genres:</strong> {{ movie.genres }}</p>
+    <p><strong>Keywords:</strong> {{ movie.keywords }}</p>
+    <p><strong>Rating:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)</p>
+    <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+    <p><strong>Revenue:</strong> ${{ movie.revenue }}</p>
+    
+    <h2>Screenings</h2>
+    <ul>
+        {% for screening in screenings %}
+            <li>{{ screening.cinema.name }} - {{ screening.date_time }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Reviews</h2>
+    <ul>
+        {% for review in reviews %}
+            <li>
+                <strong>{{ review.user.username }}</strong> rated it {{ review.rating }}/10
+                <p>{{ review.comment }}</p>
+                <p><em>{{ review.created_at }}</em></p>
+            </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Add your review</h2>
+    <form method="post" action="{% url 'add_review' movie.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Review</button>
+    </form>
+{% endblock %}
