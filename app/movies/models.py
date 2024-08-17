@@ -6,6 +6,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 from typing import List, Tuple
+from .utilss import find_index, load_model_and_data
 
 class Movie(models.Model):
     title = models.CharField(max_length=200)
@@ -18,32 +19,18 @@ class Movie(models.Model):
     image = models.URLField(max_length=200, default='')
     genres = models.CharField(max_length=200, default='')
     keywords = models.CharField(max_length=200, default='')
-
+    # trailer = models.URLField(max_length=200, default='')
     
     def __str__(self) -> str:
         return self.title
 
-    def find_index(self, name: str, movie2idx: pd.Series) -> int:
-        return movie2idx.get(name, -1) # return -1 if not found
-
-    def load_model_and_data(self) -> Tuple[pd.DataFrame, TfidfVectorizer, pd.Series]:
-        try:
-            idx_title = pd.read_csv('./data/index_tilte.csv', index_col=0)
-            with open('./model_rm/tfidf.pkl', 'rb') as f:
-                tfidf = pickle.load(f)
-            movie2idx = pd.Series(idx_title.index, index=idx_title['title'])
-            return idx_title, tfidf, movie2idx
-        except Exception as e:
-            print(f"Error loading model and data: {e}")
-            return pd.DataFrame(), None, pd.Series()
-
     def get_recommendations(self) -> List['Movie']:
         list_movies = []
-        data, model, movie2idx = self.load_model_and_data()
+        data, model, movie2idx = load_model_and_data()
         if model is None or data.empty:
             return list_movies
 
-        idx = self.find_index(self.title, movie2idx)
+        idx = find_index(self.title, movie2idx)
         if idx == -1:
             return list_movies
 
@@ -90,7 +77,7 @@ class Cinema(models.Model):
     address = models.TextField()
     
     def __str__(self):
-        return self.name
+        return self.name 
 
 class Screening(models.Model):
     """
@@ -121,33 +108,14 @@ class Ticket(models.Model):
     screening = models.ForeignKey(Screening, on_delete=models.CASCADE, related_name='tickets')
     ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1)
-    total_price = models.DecimalField(max_digits=6, decimal_places=2, editable=False)
+    # quantity = models.IntegerField(default=1)
+    # total_price = models.DecimalField(max_digits=6, decimal_places=2, editable=False)
 
     def __str__(self):
-        return f"{self.quantity} {self.ticket_type.name} for {self.screening}"
+        # return f"{self.quantity} {self.ticket_type.name} for {self.screening}"
+        return f"{self.ticket_type.name} for {self.screening}"
     
     def save(self, *args, **kwargs):
-        self.total_price = self.quantity * self.ticket_type.price
+        # self.total_price = self.quantity * self.ticket_type.price
         super().save(*args, **kwargs)
 
-
-# class Seen(models.Model):
-#     """
-#     table to store movies that user has seen
-#     """
-#     username = models.CharField(max_length=150)
-#     movieid = models.ForeignKey(Movie, default=1, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.username + '|' + self.movieid.movieid
-
-# class Expect(models.Model):
-#     """
-#     table to store movies that user expects to see
-#     """
-#     username = models.CharField(max_length=150)
-#     movieid = models.ForeignKey(Movie, default=1, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return self.username + '|' + self.movieid.movieid

@@ -9,6 +9,7 @@ from django.conf import settings
 import uuid
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+# from .models import Profile
 
 def register(request):
     if request.method == 'POST':
@@ -20,43 +21,6 @@ def register(request):
             return render(request, 'register.html', {'error': 'Invalid input!', 'form': UserCreationForm()})
     else:
         return render(request, "register.html", {'form': UserCreationForm()})
-
-# def register(request):
-#     if request.method == 'POST':
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.is_active = True 
-#             user.is_email_verified = True # Assume that user email is verified
-#             user.save()
-            
-#             # Generate verification token
-#             token = str(uuid.uuid4())
-#             user.email_verification_token = token
-#             user.save()
-            
-#             # Send verification email
-#             subject = 'Verify your email'
-#             message = f'Please click the link to verify your email: {settings.SITE_URL}/verify-email/{token}'
-#             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
-            
-#             messages.success(request, 'Please check your email to verify your account.')
-#             return redirect('login')
-#     else:
-#         form = CustomUserCreationForm()
-#     return render(request, 'register.html', {'form': form})
-
-# def verify_email(request, token):
-#     try:
-#         user = CustomUser.objects.get(email_verification_token=token)
-#         user.is_active = True
-#         user.is_email_verified = True
-#         user.email_verification_token = ''
-#         user.save()
-#         messages.success(request, 'Your email has been verified. You can now log in.')
-#     except CustomUser.DoesNotExist:
-#         messages.error(request, 'Invalid verification token.')
-#     return redirect('login')
 
 def user_login(request):
     if request.method == 'POST':
@@ -106,3 +70,44 @@ def delete_account(request):
         else:
             messages.error(request, 'Invalid password.')
     return render(request, 'delete_account.html')
+
+
+# def view_balance(request):
+#     profile = Profile.objects.get(user=request.user)
+#     return render(request, 'user/balance.html', {'profile': profile})
+
+#     if request.method == 'POST':
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save(commit=False)
+#             user.is_active = True 
+#             user.is_email_verified = True # Assume that user email is verified
+#             user.save()
+            
+#             # Generate verification token
+#             token = str(uuid.uuid4())
+#             user.email_verification_token = token
+#             user.save()
+            
+#             # Send verification email
+#             subject = 'Verify your email'
+#             message = f'Please click the link to verify your email: {settings.SITE_URL}/verify-email/{token}'
+#             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+            
+#             messages.success(request, 'Please check your email to verify your account.')
+#             return redirect('login')
+#     else:
+#         form = CustomUserCreationForm()
+#     return render(request, 'register.html', {'form': form})
+
+# def verify_email(request, token):
+#     try:
+#         user = CustomUser.objects.get(email_verification_token=token)
+#         user.is_active = True
+#         user.is_email_verified = True
+#         user.email_verification_token = ''
+#         user.save()
+#         messages.success(request, 'Your email has been verified. You can now log in.')
+#     except CustomUser.DoesNotExist:
+#         messages.error(request, 'Invalid verification token.')
+#     return redirect('login')

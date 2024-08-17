@@ -19,13 +19,14 @@ class ReviewForm(forms.ModelForm):
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
-        fields = ['ticket_type', 'quantity']
-        widgets = {
-            'quantity': forms.NumberInput(attrs={'min': 1}),
-        }
+        # fields = ['ticket_type', 'quantity']
+        fields = ['ticket_type']
+        # widgets = {
+        #     'quantity': forms.NumberInput(attrs={'min': 1}),
+        # }
 
-    def clean_quantity(self):
-        quantity = self.cleaned_data.get('quantity')
-        if quantity < 1:
-            raise forms.ValidationError("Quantity must be at least 1.")
-        return quantity
+    # def clean_quantity(self):
+    #     quantity = self.cleaned_data.get('quantity')
+    #     if quantity < 1:
+    #         raise forms.ValidationError("Quantity must be at least 1.")
+    #     return quantity

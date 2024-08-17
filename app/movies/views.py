@@ -5,10 +5,13 @@ from .models import Movie, Cinema, Screening, TicketType, Ticket, Review
 from django.http import HttpResponse, HttpRequest
 from .forms import ReviewForm, TicketForm
 from random import sample
+from cart.views import add_to_cart
 
 def home(request):
     # Get top 10 movies with the highest vote_average
-    top_movies = Movie.objects.order_by('-vote_average')[:10]
+    top_movies = Movie.objects.order_by('-vote_average')[:100]
+    # Get random top 100 movies
+    top_movies = sample(list(top_movies), min(len(top_movies), 10))
     base_image_url = 'https://image.tmdb.org/t/p/w500'
     # Get all cinemas and select 10 random ones
     all_cinemas = list(Cinema.objects.all())
@@ -32,7 +35,7 @@ def movie_list(request: 'HttpRequest') -> 'HttpResponse':
 def movie_detail(request: 'HttpRequest', movie_id: int) -> 'HttpResponse':
     movie = get_object_or_404(Movie, id=movie_id)
     screenings = movie.screenings.select_related('cinema').order_by('date_time')
-    reviews = movie.reviews.select_related('user').order_by('-created_at')
+    reviews = movie.reviews.select_related('user').order_by('-created_at') # order by newest first
     base_image_url = 'https://image.tmdb.org/t/p/w500'
     recommended_movies = movie.get_recommendations()
     return render(request, 'movies/movie_detail.html', {
@@ -75,6 +78,7 @@ def cinema_list(request: 'HttpRequest') -> 'HttpResponse':
     return render(request, 'movies/cinema_list.html', {'cinemas': cinemas})
 
 def cinema_detail(request: 'HttpRequest', cinema_id: int) -> 'HttpResponse':
+    # can add image_url to the context to display cinema image
     cinema = get_object_or_404(Cinema, id=cinema_id)
     screenings = cinema.screenings.select_related('movie').order_by('date_time')
     return render(request, 'movies/cinema_detail.html', {'cinema': cinema, 'screenings': screenings})
@@ -89,7 +93,8 @@ def book_ticket(request: 'HttpRequest', screening_id: int) -> 'HttpResponse':
             ticket.screening = screening
             ticket.user = request.user
             ticket.save()
-            return redirect('booking_confirmation', ticket_id=ticket.id)  # Updated to pass ticket_id in the redirect
+            return add_to_cart(request, ticket.id)  # Add ticket to cart
+            # return redirect('booking_confirmation', ticket_id=ticket.id)  # Updated to pass ticket_id in the redirect
         else:
             messages.error(request, "There was an error in your submission. Please correct the highlighted fields.")
     else:
@@ -100,10 +105,10 @@ def book_ticket(request: 'HttpRequest', screening_id: int) -> 'HttpResponse':
         'screening': screening,
     })
 
-@login_required
-def booking_confirmation(request: 'HttpRequest', ticket_id: int) -> 'HttpResponse':
-    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-    return render(request, 'movies/booking_confirmation.html', {'ticket': ticket})
+# @login_required
+# def booking_confirmation(request: 'HttpRequest', ticket_id: int) -> 'HttpResponse':
+#     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+#     return render(request, 'movies/booking_confirmation.html', {'ticket': ticket})
 
 def search(request: 'HttpRequest') -> 'HttpResponse':
     query = request.GET.get('q')

@@ -1,3 +1,6 @@
 .venv/
 __pycache__/
 data/
+jstest/
+
+app/dump.json
