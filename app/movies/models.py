@@ -19,7 +19,7 @@ class Movie(models.Model):
     image = models.URLField(max_length=200, default='')
     genres = models.CharField(max_length=200, default='')
     keywords = models.CharField(max_length=200, default='')
-
+    # trailer = models.URLField(max_length=200, default='')
     
     def __str__(self) -> str:
         return self.title
