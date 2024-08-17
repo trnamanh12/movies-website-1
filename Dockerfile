@@ -12,7 +12,11 @@ COPY ./requirements.txt /tmp/requirements.txt
 
 # Install dependencies
 RUN pip install -r /tmp/requirements.txt && \
-    rm -rf /tmp
+    rm -rf /tmp 
+
+
+    # apt-get update && apt-get install -y postgresql-client
+
 
 # Copy the Django project
 COPY ./app /app
