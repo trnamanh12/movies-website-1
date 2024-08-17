@@ -5,6 +5,7 @@ from .models import Movie, Cinema, Screening, TicketType, Ticket, Review
 from django.http import HttpResponse, HttpRequest
 from .forms import ReviewForm, TicketForm
 from random import sample
+from cart.views import add_to_cart
 
 def home(request):
     # Get top 10 movies with the highest vote_average
@@ -92,7 +93,8 @@ def book_ticket(request: 'HttpRequest', screening_id: int) -> 'HttpResponse':
             ticket.screening = screening
             ticket.user = request.user
             ticket.save()
-            return redirect('booking_confirmation', ticket_id=ticket.id)  # Updated to pass ticket_id in the redirect
+            return add_to_cart(request, ticket.id)  # Add ticket to cart
+            # return redirect('booking_confirmation', ticket_id=ticket.id)  # Updated to pass ticket_id in the redirect
         else:
             messages.error(request, "There was an error in your submission. Please correct the highlighted fields.")
     else:
@@ -103,10 +105,10 @@ def book_ticket(request: 'HttpRequest', screening_id: int) -> 'HttpResponse':
         'screening': screening,
     })
 
-@login_required
-def booking_confirmation(request: 'HttpRequest', ticket_id: int) -> 'HttpResponse':
-    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-    return render(request, 'movies/booking_confirmation.html', {'ticket': ticket})
+# @login_required
+# def booking_confirmation(request: 'HttpRequest', ticket_id: int) -> 'HttpResponse':
+#     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+#     return render(request, 'movies/booking_confirmation.html', {'ticket': ticket})
 
 def search(request: 'HttpRequest') -> 'HttpResponse':
     query = request.GET.get('q')
