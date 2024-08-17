@@ -1,3 +1,4 @@
+# path: app/user/views.py
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -10,13 +11,21 @@ import uuid
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 # from .models import Profile
+from .forms import CustomUserChangeForm
+import logging
+
+logger = logging.getLogger(__name__)
+
+def home(request):
+    # redirect to home at mysites
+    return redirect('home')
 
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return render(request, 'base.html', {'message': 'Registered successfully, congratulations! Please login.'})
+            return render(request, 'base_user.html', {'message': 'Registered successfully, congratulations! Please login.'})
         else:
             return render(request, 'register.html', {'error': 'Invalid input!', 'form': UserCreationForm()})
     else:
@@ -34,13 +43,25 @@ def user_login(request):
             messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
 
+# @login_required
+# def user_logout(request):
+#     if request.method == 'POST':
+#         logout(request)  # This logs out the user
+#         return redirect('login')
+#     else:
+#         return redirect('home')  # Redirect to home if not a POST request
+
+
+
 @login_required
 def user_logout(request):
+    logger.info(f"Logout request method: {request.method}")
     if request.method == 'POST':
-        logout(request)  # This logs out the user
+        logout(request)
         return redirect('login')
     else:
-        return redirect('home')  # Redirect to home if not a POST request
+        return redirect('home')
+
 
 @login_required
 def view_profile(request):
@@ -49,13 +70,13 @@ def view_profile(request):
 @login_required
 def edit_profile(request):
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=request.user)
+        form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Your profile has been updated.')
             return redirect('profile')
     else:
-        form = UserChangeForm(instance=request.user)
+        form = CustomUserChangeForm(instance=request.user)
     return render(request, 'edit_profile.html', {'form': form})
 
 @login_required
