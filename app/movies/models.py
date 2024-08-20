@@ -40,7 +40,7 @@ class Movie(models.Model):
 
         try:
             similarity_scores = cosine_similarity(model[idx:idx+1], model).flatten()
-            similar_indices = similarity_scores.argsort()[::-1][1:8]
+            similar_indices = similarity_scores.argsort()[::-1][1:13]
             result_titles = data['title'].iloc[similar_indices].tolist()
             for title in result_titles:
                 movie = Movie.objects.filter(title=title).first()
@@ -108,7 +108,6 @@ class Ticket(models.Model):
     ticket_type = models.ForeignKey(TicketType, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # quantity = models.IntegerField(default=1)
-    # total_price = models.DecimalField(max_digits=6, decimal_places=2, editable=False)
 
 
     def __str__(self):
@@ -119,3 +118,15 @@ class Ticket(models.Model):
         # self.total_price = self.quantity * self.ticket_type.price
         super().save(*args, **kwargs)
 
+class UserHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='history')
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='user_histories')
+    last_watched = models.DateTimeField(auto_now=True)
+    saved = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"{self.user.username} watched {self.movie.title}"
+    
+    class Meta:
+        unique_together = ('user', 'movie')
+        verbose_name_plural = "User Histories"
