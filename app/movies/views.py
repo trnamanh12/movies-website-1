@@ -6,8 +6,9 @@ from django.http import HttpResponse, HttpRequest
 from .forms import ReviewForm, TicketForm
 from random import sample
 from cart.views import add_to_cart
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-def home(request):
+def home(request : 'HttpRequest') -> 'HttpResponse':
     # Get top 10 movies with the highest vote_average
     top_movies = Movie.objects.order_by('-vote_average')[:100]
     # Get random top 100 movies
@@ -23,14 +24,31 @@ def home(request):
         'base_image_url': base_image_url,
     })
 
+
 def movie_list(request: 'HttpRequest') -> 'HttpResponse':
-    query = request.GET.get('q') # Get the query string from the URL
+    query = request.GET.get('q')  # Get the query string from the URL
     if query:
         movies = Movie.objects.filter(title__icontains=query)
     else:
         movies = Movie.objects.all()
+    
+    paginator = Paginator(movies, 12)  # Show 12 movies per page
+    page = request.GET.get('page')
+    
+    try:
+        movies = paginator.page(page)
+    except PageNotAnInteger:
+        movies = paginator.page(1)
+    except EmptyPage:
+        movies = paginator.page(paginator.num_pages)
+    
     base_image_url = 'https://image.tmdb.org/t/p/w500'
-    return render(request, 'movies/movie_list.html', {'movies': movies, 'base_image_url': base_image_url, 'query': query})
+    return render(request, 'movies/movie_list.html', {
+        'movies': movies,
+        'base_image_url': base_image_url,
+        'query': query,
+        'paginator': paginator,
+    })
 
 def movie_detail(request: 'HttpRequest', movie_id: int) -> 'HttpResponse':
     movie = get_object_or_404(Movie, id=movie_id)
