@@ -1,5 +1,5 @@
 {% for item in cart_items %}
-    <p>{{ item.ticket.name }} - Quantity: {{ item.quantity }} - Price: {{ item.ticket.price }}</p>
+    <p>{{ item.ticket }} - Quantity: {{ item.quantity }} - Price: {{ item.ticket.ticket_type.price }}</p>
     <a href="{% url 'remove_from_cart' item.id %}">Remove</a>
 {% endfor %}
 <p>Total: {{ total_amount }}</p>
