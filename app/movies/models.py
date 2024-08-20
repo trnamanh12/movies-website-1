@@ -10,16 +10,16 @@ from .utilss import find_index, load_model_and_data
 
 class Movie(models.Model):
     title = models.CharField(max_length=200)
-    vote_average = models.DecimalField(max_digits=3, decimal_places=2, default=0.0)
+    vote_average = models.DecimalField(max_digits=5, decimal_places=3, default=0.0)
     vote_count = models.IntegerField(default=0)
     # price = models.DecimalField(max_digits=6, decimal_places=2)
     release_date = models.DateField(default='2020-01-01')
-    revenue = models.DecimalField(max_digits=15, decimal_places=2, default=0.0)
+    revenue = models.DecimalField(max_digits=14, decimal_places=1, default=0.0)
     overview = models.TextField(default='')
     image = models.URLField(max_length=200, default='')
     genres = models.CharField(max_length=200, default='')
-    keywords = models.CharField(max_length=200, default='')
-    # trailer = models.URLField(max_length=200, default='')
+    # keywords = models.CharField(max_length=200, default='')
+    trailer = models.URLField(max_length=200, default='')
     
     def __str__(self) -> str:
         return self.title
@@ -31,6 +31,7 @@ class Movie(models.Model):
             return list_movies
 
         idx = find_index(self.title, movie2idx)
+        
         if idx == -1:
             return list_movies
 
@@ -86,8 +87,6 @@ class Screening(models.Model):
     - cinema: FK to Cinema
     - date_time: datetime of the screening
     - time: time of the screening
-    should I change this to many-to-many?
-    because there are many cinemas and many movies each screening can be in multiple cinemas
     """
     # id = models.AutoField(primary_key=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='screenings')
@@ -110,6 +109,7 @@ class Ticket(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # quantity = models.IntegerField(default=1)
     # total_price = models.DecimalField(max_digits=6, decimal_places=2, editable=False)
+
 
     def __str__(self):
         # return f"{self.quantity} {self.ticket_type.name} for {self.screening}"
