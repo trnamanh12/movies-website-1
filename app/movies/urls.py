@@ -16,4 +16,8 @@ urlpatterns = [
     # path('booking-confirmation/<int:ticket_id>/', views.booking_confirmation, name='booking_confirmation'),  # Display booking confirmation for a specific ticket
 
     path('search/', views.search, name='search'),  # Search for movies and cinemas
+
+    path('save_movie/<int:movie_id>/', views.save_movie, name='save_movie'),  # Save a movie to the user's watchlist
+    path('viewing_history/', views.viewing_history, name='viewing_history'),  # Display the user's viewing history
+    path('view_saved_movies/', views.view_saved_movies, name='view_saved_movies'),  # Display the user's saved movies
 ]

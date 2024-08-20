@@ -12,7 +12,10 @@
     <p><strong>Rating:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)</p>
     <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
     <p><strong>Revenue:</strong> ${{ movie.revenue }}</p>
-
+    <form method="post" action="{% url 'save_movie' movie.id %}">
+        {% csrf_token %}
+        <button type="submit">Save Movie</button>
+    </form>
     <h2>Trailer</h2>
     <iframe width="1600" height="680" src="https://www.youtube.com/embed/{{ movie.trailer }}" frameborder="0" allowfullscreen></iframe>
     
@@ -20,7 +23,10 @@
     {% if screenings %}
         <ul>
             {% for screening in screenings %}
-                <li>{{ screening.cinema.name }} - {{ screening.date_time }}</li>
+                <li>
+                    {{ screening.cinema.name }} - {{ screening.date_time }}
+                    <a href="{% url 'book_ticket' screening.id %}">Book Ticket</a> <!-- Add this line -->
+                </li>
             {% endfor %}
         </ul>
     {% else %}
