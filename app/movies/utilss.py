@@ -9,8 +9,8 @@ def find_index( name: str, movie2idx: pd.Series) -> int:
 
 def load_model_and_data() -> Tuple[pd.DataFrame, TfidfVectorizer, pd.Series]:
         try:
-            idx_title = pd.read_csv('./data/index_tilte.csv', index_col=0)
-            with open('./model_rm/tfidf.pkl', 'rb') as f:
+            idx_title = pd.read_csv('./data/movies_title3.csv', index_col=0)
+            with open('./model_rm/tfidf_model1.pkl', 'rb') as f:
                 tfidf = pickle.load(f)
             movie2idx = pd.Series(idx_title.index, index=idx_title['title'])
             return idx_title, tfidf, movie2idx

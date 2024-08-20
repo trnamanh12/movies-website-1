@@ -6,12 +6,12 @@
 
 <h2>Screenings</h2>
 <ul>
-    {% for screening in screenings %} <!--This is a Django template tag that loops through the list of screenings. -->
+    {% for screening in screenings %} 
     <li>
         {{ screening.movie.title }} - {{ screening.date_time }}
         <a href="{% url 'book_ticket' screening.id %}">Book Ticket</a> <!--This is a Django template tag that generates a URL for the book_ticket view. -->
     </li>
-    {% empty %}  <!--This is a Django template tag that checks if the list is empty. -->
+    {% empty %}  
     <li>No screenings available.</li>
     {% endfor %}
 </ul>

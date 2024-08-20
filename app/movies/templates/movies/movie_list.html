@@ -1,21 +1,44 @@
 {% extends 'base.html' %}
-
+{% load static %}
+<link rel="stylesheet" href="{% static 'movies/movies_list.css' %}">
 {% block content %}
-<form method="get" action="{% url 'search' %}">
-    <input type="text" name="q" placeholder="Search for movies..." value="{{ query }}">
-    <button type="submit">Search</button>
-</form>
-<h1>Movies</h1>
-<div class="movie-list">
-    {% for movie in movies %}
-    <div class="movie-item">
-        <h2><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></h2>
-        <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="200">
-        <p><strong>Year</strong> : {{ movie.release_date.year }}</p>
-        <p><strong>Rating</strong> : {{ movie.vote_average }}</p>
+<div class="container">
+    <form class="search-form" method="get" action="{% url 'search' %}">
+        <input type="text" name="q" placeholder="Search for movies..." value="{{ query }}" class="search-input">
+        <button type="submit" class="search-button">Search</button>
+    </form>
+
+    <h1 class="page-title">Discover Amazing Movies</h1>
+
+    <div class="movie-list">
+        {% for movie in movies %}
+            <div class="movie-card">
+                <a href="{% url 'movie_detail' movie.id %}">
+                    <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" class="movie-image">
+                    <h2 class="movie-title">{{ movie.title }}</h2>
+                </a>
+                <p><strong>Year:</strong> {{ movie.release_date.year }}</p>
+                <p><strong>Rating:</strong> {{ movie.vote_average }}</p>
+            </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p>No movies available.</p>
-    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if movies.has_previous %}
+                <a href="?page=1{% if query %}&q={{ query }}{% endif %}" class="pagination-link">&laquo; first</a>
+                <a href="?page={{ movies.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="pagination-link">previous</a>
+            {% endif %}
+
+            <span class="current-page">
+                Page {{ movies.number }} of {{ movies.paginator.num_pages }}.
+            </span>
+
+            {% if movies.has_next %}
+                <a href="?page={{ movies.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="pagination-link">next</a>
+                <a href="?page={{ movies.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}" class="pagination-link">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
 </div>
 {% endblock %}

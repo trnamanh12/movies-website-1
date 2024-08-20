@@ -8,16 +8,25 @@
     <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="300">
     <p><strong>Overview:</strong> {{ movie.overview }}</p>
     <p><strong>Genres:</strong> {{ movie.genres }}</p>
-    <p><strong>Keywords:</strong> {{ movie.keywords }}</p>
+    <!-- <p><strong>Keywords:</strong> {{ movie.keywords }}</p> -->
     <p><strong>Rating:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)</p>
     <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
     <p><strong>Revenue:</strong> ${{ movie.revenue }}</p>
+    <form method="post" action="{% url 'save_movie' movie.id %}">
+        {% csrf_token %}
+        <button type="submit">Save Movie</button>
+    </form>
+    <h2>Trailer</h2>
+    <iframe width="1600" height="680" src="https://www.youtube.com/embed/{{ movie.trailer }}" frameborder="0" allowfullscreen></iframe>
     
     <h2>Screenings</h2>
     {% if screenings %}
         <ul>
             {% for screening in screenings %}
-                <li>{{ screening.cinema.name }} - {{ screening.date_time }}</li>
+                <li>
+                    {{ screening.cinema.name }} - {{ screening.date_time }}
+                    <a href="{% url 'book_ticket' screening.id %}">Book Ticket</a> <!-- Add this line -->
+                </li>
             {% endfor %}
         </ul>
     {% else %}
@@ -54,7 +63,6 @@
     {% else %}
         <p>No recommendations available.</p>
     {% endif %}
-
 
     <h2>Add your review</h2>
     <form method="post" action="{% url 'add_review' movie.id %}">

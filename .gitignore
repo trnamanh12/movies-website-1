@@ -4,3 +4,5 @@ data/
 jstest/
 
 app/dump.json
+storage/
+cinema_image/
