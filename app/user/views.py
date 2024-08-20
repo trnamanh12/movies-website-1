@@ -16,6 +16,16 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+"""
+home : redirect to home at mysites
+register: 
+user_login
+user_logout
+view_profile
+edit_profile
+delete_account
+"""
+
 def home(request):
     # redirect to home at mysites
     return redirect('home')
@@ -27,7 +37,7 @@ def register(request):
             new_user = form.save()
             return render(request, 'base_user.html', {'message': 'Registered successfully, congratulations! Please login.'})
         else:
-            return render(request, 'register.html', {'error': 'Invalid input!', 'form': UserCreationForm()})
+            return render(request, 'register.html', {'error': 'Invalid information!', 'form': UserCreationForm()})
     else:
         return render(request, "register.html", {'form': UserCreationForm()})
 
