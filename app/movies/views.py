@@ -140,7 +140,8 @@ def search(request: 'HttpRequest') -> 'HttpResponse':
     query = request.GET.get('q')
     movies = Movie.objects.filter(title__icontains=query)
     cinemas = Cinema.objects.filter(name__icontains=query)
-    return render(request, 'movies/search_results.html', {'movies': movies, 'cinemas': cinemas})
+    base_image_url = 'https://image.tmdb.org/t/p/w500'
+    return render(request, 'movies/search_results.html', {'movies': movies, 'cinemas': cinemas, 'base_image_url': base_image_url})
 
 @login_required
 def save_movie(request, movie_id):

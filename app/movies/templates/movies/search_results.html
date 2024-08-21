@@ -6,6 +6,7 @@
     <ul>
     {% for movie in movies %}
         <li><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></li>
+        <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" class="movie-image">
     {% endfor %}
     </ul>
 {% endif %}
