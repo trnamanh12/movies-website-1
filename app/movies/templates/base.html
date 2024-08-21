@@ -88,6 +88,7 @@
     <header>
         <nav>
             <ul>
+                <li><a href="{% url 'home' %}">Home Page</a></li>
                 <li><a href="{% url 'movie_list' %}">Movies</a></li>
                 <li><a href="{% url 'cinema_list' %}">Cinemas</a></li>
                 {% if user.is_authenticated %}
@@ -105,6 +106,12 @@
                     <li><a href="{% url 'login' %}">Login</a></li>
                     <li><a href="{% url 'register' %}">Register</a></li>
                 {% endif %}
+                <li>
+                    <form class="search-form" method="get" action="{% url 'search' %}">
+                        <input type="text" name="q" placeholder="Search..." class="search-input">
+                        <button type="submit" class="search-button">Search</button>
+                    </form>
+                </li>
             </ul>
         </nav>
     </header>

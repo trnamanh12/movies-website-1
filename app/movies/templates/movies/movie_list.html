@@ -3,11 +3,6 @@
 <link rel="stylesheet" href="{% static 'movies/movies_list.css' %}">
 {% block content %}
 <div class="container">
-    <form class="search-form" method="get" action="{% url 'search' %}">
-        <input type="text" name="q" placeholder="Search for movies..." value="{{ query }}" class="search-input">
-        <button type="submit" class="search-button">Search</button>
-    </form>
-
     <h1 class="page-title">Discover Amazing Movies</h1>
 
     <div class="movie-list">
