@@ -1,12 +1,84 @@
-<style>
-    body {
-        background-color: #440e0e;
-    }
-</style>
-
-{% for item in cart_items %}
-    <p>{{ item.ticket }} - Quantity: {{ item.quantity }} - Price: {{ item.ticket.ticket_type.price }}</p>
-    <a href="{% url 'remove_from_cart' item.id %}">Remove</a>
-{% endfor %}
-<p>Total: {{ total_amount }}</p>
-<a href="{% url 'checkout' %}">Proceed to Checkout</a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Cart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #281212;
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+        h1 {
+            text-align: center;
+            color: #444;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .cart-item p {
+            margin: 0;
+        }
+        .cart-item a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .cart-item a:hover {
+            text-decoration: underline;
+        }
+        .total {
+            text-align: right;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        .checkout {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .checkout:hover {
+            background-color: #2ecc71;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Cart</h1>
+        {% for item in cart_items %}
+            <div class="cart-item">
+                <p>{{ item.ticket }} - Quantity: {{ item.quantity }} - Price: {{ item.ticket.ticket_type.price }}</p>
+                <a href="{% url 'remove_from_cart' item.id %}">Remove</a>
+            </div>
+        {% endfor %}
+        <p class="total">Total: {{ total_amount }}</p>
+        <a class="checkout" href="{% url 'checkout' %}">Proceed to Checkout</a>
+    </div>
+</body>
+</html>

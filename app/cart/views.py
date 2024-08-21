@@ -41,7 +41,7 @@ def checkout(request):
     total_amount = cart.get_total_amount
     payment = Payment.objects.create(user=request.user, cart=cart, status='Pending')
     # Simulate payment processing
-    messages.info(request, 'Payment processing...')
+    # messages.info(request, 'Payment processing...')
     payment.status = 'Completed'  # Simulating a successful payment
     payment.save()
     # Clear the cart after payment
