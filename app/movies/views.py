@@ -53,8 +53,6 @@ def movie_list(request: 'HttpRequest') -> 'HttpResponse':
         'paginator': paginator,
     })
 
-from django.utils import timezone
-
 def movie_detail(request: 'HttpRequest', movie_id: int) -> 'HttpResponse':
     movie = get_object_or_404(Movie, id=movie_id)
     
