@@ -8,6 +8,8 @@
 <p>Cinema: {{ ticket.screening.cinema.name }}</p>
 <p>Date and Time: {{ ticket.screening.date_time }}</p>
 <p>Ticket Type: {{ ticket.ticket_type.name }}</p>
-<p>Quantity: {{ ticket.quantity }}</p>
-<p>Total Price: ${{ ticket.total_price }}</p>
+<p>Price per ticket: ${{ ticket.ticket_type.price }}</p>
+<!-- <p>Quantity: {{ ticket.quantity }}</p> -->
+<!-- <p>Total Price: ${{ ticket.total_price }}</p> -->
+ <a href="{% url 'view_cart' %}">View Cart</a>
 {% endblock %}

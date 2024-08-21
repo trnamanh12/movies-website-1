@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Viewing History</h1>
+{% if user_histories %}
+    <ul>
+        {% for history in user_histories %}
+            <li>
+                <a href="{% url 'movie_detail' history.movie.id %}">{{ history.movie.title }}</a>
+                - Last Watched: {{ history.last_watched }}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have not watched any movies yet.</p>
+{% endif %}
+{% endblock %}

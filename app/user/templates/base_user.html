@@ -13,13 +13,13 @@
         <nav>
             <ul>
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}">Profile</a></li>
                 {% if user.is_authenticated %}
+                    <li><a href="{% url 'profile' %}">Profile</a></li>
                     <li>
-                        <form id="logout-form" action="{% url 'logout' %}" method="POST" style="display: none;">
+                        <form action="{% url 'logout' %}" method="post">
                             {% csrf_token %}
+                            <button type="submit">Logout</button>
                         </form>
-                        <a href="#" onclick="document.getElementById('logout-form').submit();">Logout</a>
                     </li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>

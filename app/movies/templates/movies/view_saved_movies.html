@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Saved Movies</h1>
+{% if saved_movies %}
+    <ul>
+        {% for saved_movie in saved_movies %}
+            <li>
+                <a href="{% url 'movie_detail' saved_movie.movie.id %}">{{ saved_movie.movie.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>You have not saved any movies yet.</p>
+{% endif %}
+{% endblock %}
