@@ -29,10 +29,5 @@ urlpatterns = [
     path('movies/', include('movies.urls')),
     path('user/', include('user.urls')),
     path('cart/', include('cart.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/login/', user_views.user_login, name='login'),
-    path('accounts/register/', user_views.register, name='register'), 
-    path('accounts/logout/', user_views.user_logout, name='logout'),
-    path('accounts/profile/', user_views.view_profile, name='profile'),
-    # path('home/', movie_views.home, name='home'),
+    path('user/', include('django.contrib.auth.urls')),
 ]

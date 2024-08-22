@@ -8,5 +8,4 @@ class CustomUserChangeForm(forms.ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'date_joined']
         widgets = {
             'date_joined': forms.DateInput(attrs={'readonly': 'readonly'}),
-            
         }
