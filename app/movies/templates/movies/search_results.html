@@ -1,21 +1,36 @@
 {% extends 'base.html' %}
+
 {% block content %}
-<h1>Search Results</h1>
-{% if movies %}
-    <h2>Movies</h2>
-    <ul>
-    {% for movie in movies %}
-        <li><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></li>
-        <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" class="movie-image">
-    {% endfor %}
-    </ul>
-{% endif %}
-{% if cinemas %}
-    <h2>Cinemas</h2>
-    <ul>
-    {% for cinema in cinemas %}
-        <li><a href="{% url 'cinema_detail' cinema.id %}">{{ cinema.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% endif %}
+<div class="container">
+    <h1 class="mb-4">Search Results</h1>
+
+    {% if movies %}
+        <h2>Movies</h2>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for movie in movies %}
+                <div class="col">
+                    <div class="card bg-dark text-white h-100">
+                        <a href="{% url 'movie_detail' movie.id %}">
+                            <img src="{{ base_image_url }}{{ movie.image }}" class="card-img-top" alt="{{ movie.title }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'movie_detail' movie.id %}" class="text-white text-decoration-none">{{ movie.title }}</a></h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if cinemas %}
+        <h2 class="mt-5">Cinemas</h2>
+        <ul class="list-group">
+            {% for cinema in cinemas %}
+                <li class="list-group-item bg-dark text-white">
+                    <a href="{% url 'cinema_detail' cinema.id %}" class="text-white text-decoration-none">{{ cinema.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 {% endblock %}

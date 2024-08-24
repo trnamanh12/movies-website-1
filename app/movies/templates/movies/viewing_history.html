@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Viewing History</h1>
-{% if user_histories %}
-    <ul>
-        {% for history in user_histories %}
-            <li>
-                <a href="{% url 'movie_detail' history.movie.id %}">{{ history.movie.title }}</a>
-                - Last Watched: {{ history.last_watched }}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>You have not watched any movies yet.</p>
-{% endif %}
+<div class="container">
+    <h1 class="mb-4">Viewing History</h1>
+    {% if user_histories %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for history in user_histories %}
+                <div class="col">
+                    <div class="card bg-dark text-white h-100">
+                        <a href="{% url 'movie_detail' history.movie.id %}">
+                            <img src="{{ base_image_url }}{{ history.movie.image }}" class="card-img-top" alt="{{ history.movie.title }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'movie_detail' history.movie.id %}" class="text-white text-decoration-none">{{ history.movie.title }}</a></h5>
+                            <p class="card-text"><strong>Last Watched:</strong> {{ history.last_watched }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have not watched any movies yet.</p>
+    {% endif %}
+</div>
 {% endblock %}

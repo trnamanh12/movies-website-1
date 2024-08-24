@@ -1,15 +1,31 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Booking Confirmation</h1>
-<p>Thank you for your booking!</p>
-<h2>Booking Details:</h2>
-<p>Movie: {{ ticket.screening.movie.title }}</p>
-<p>Cinema: {{ ticket.screening.cinema.name }}</p>
-<p>Date and Time: {{ ticket.screening.date_time }}</p>
-<p>Ticket Type: {{ ticket.ticket_type.name }}</p>
-<p>Price per ticket: ${{ ticket.ticket_type.price }}</p>
-<!-- <p>Quantity: {{ ticket.quantity }}</p> -->
-<!-- <p>Total Price: ${{ ticket.total_price }}</p> -->
- <a href="{% url 'view_cart' %}">View Cart</a>
+<div class="card text-center bg-secondary text-light">  
+    <div class="card-header">
+        <h1>Booking Confirmation</h1>
+    </div>
+    <div class="card-body">
+        <p class="lead">Thank you for your booking!</p>
+        <h2 class="card-title">Booking Details</h2>
+        <ul class="list-group list-group-flush bg-secondary text-light"> 
+            <li class="list-group-item bg-secondary">
+                <strong>Movie:</strong> {{ ticket.screening.movie.title }}
+            </li>
+            <li class="list-group-item bg-secondary">
+                <strong>Cinema:</strong> {{ ticket.screening.cinema.name }}
+            </li>
+            <li class="list-group-item bg-secondary">
+                <strong>Date and Time:</strong> {{ ticket.screening.date_time }}
+            </li>
+            <li class="list-group-item bg-secondary">
+                <strong>Ticket Type:</strong> {{ ticket.ticket_type.name }}
+            </li>
+            <li class="list-group-item bg-secondary">
+                <strong>Price:</strong> ${{ ticket.ticket_type.price|floatformat:2 }}
+            </li>
+        </ul>
+        <a href="{% url 'view_cart' %}" class="btn btn-primary mt-4">View Cart</a>
+    </div>
+</div>
 {% endblock %}

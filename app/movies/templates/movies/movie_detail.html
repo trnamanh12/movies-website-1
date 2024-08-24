@@ -1,73 +1,106 @@
-<!-- project/movies/templates/movies/movie_detail.html -->
 {% extends "base.html" %}
 
 {% block title %}{{ movie.title }}{% endblock %}
 
 {% block content %}
-    <h1>{{ movie.title }}</h1>
-    <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="300">
-    <p><strong>Overview:</strong> {{ movie.overview }}</p>
-    <p><strong>Genres:</strong> {{ movie.genres }}</p>
-    <!-- <p><strong>Keywords:</strong> {{ movie.keywords }}</p> -->
-    <p><strong>Rating:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)</p>
-    <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
-    <p><strong>Revenue:</strong> ${{ movie.revenue }}</p>
-    <form method="post" action="{% url 'save_movie' movie.id %}">
-        {% csrf_token %}
-        <button type="submit">Save Movie</button>
-    </form>
-    <h2>Trailer</h2>
-    <iframe width="1600" height="680" src="https://www.youtube.com/embed/{{ movie.trailer }}" frameborder="0" allowfullscreen></iframe>
-    
-    <h2>Screenings</h2>
-    {% if screenings %}
-        <ul>
-            {% for screening in screenings %}
-                <li>
-                    {{ screening.cinema.name }} - {{ screening.date_time }}
-                    <a href="{% url 'book_ticket' screening.id %}">Book Ticket</a> <!-- Add this line -->
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No screenings available.</p>
-    {% endif %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" class="img-fluid rounded">
+        </div>
+        <div class="col-md-8">
+            <h1>{{ movie.title }}</h1>
+            <p><strong>Overview:</strong> {{ movie.overview }}</p>
+            <p><strong>Genres:</strong> {{ movie.genres }}</p>
+            <p><strong>Rating:</strong> {{ movie.vote_average }} ({{ movie.vote_count }} votes)</p>
+            <p><strong>Release Date:</strong> {{ movie.release_date }}</p>
+            <p><strong>Revenue:</strong> ${{ movie.revenue }}</p>
+            <form method="post" action="{% url 'save_movie' movie.id %}" class="mt-3">
+                {% csrf_token %}
+                <button type="submit" class="ticket-button">Save Movie</button>
+            </form>
+        </div>
+    </div>
 
-    <h2>Reviews</h2>
-    {% if reviews %}
-        <ul>
-            {% for review in reviews %}
-                <li>
-                    <strong>{{ review.user.username }}</strong> rated it {{ review.rating }}/10
-                    <p>{{ review.comment }}</p>
-                    <p><em>{{ review.created_at }}</em></p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No reviews available.</p>
-    {% endif %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Trailer</h2>
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{{ movie.trailer }}" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
 
-    <h2>Recommended Movies</h2>
-    {% if recommended_movies %}
-        <ul>
-            {% for recommended_movie in recommended_movies %}
-                <li>
-                    <a href="{% url 'movie_detail' recommended_movie.id %}">
-                        {{ recommended_movie.title }}
-                    </a>
-                    <img src="{{ base_image_url }}{{ recommended_movie.image }}" alt="{{ recommended_movie.title }}" width="100">
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No recommendations available.</p>
-    {% endif %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Screenings</h2>
+            {% if screenings %}
+                <ul class="list-group">
+                    {% for screening in screenings %}
+                        <li class="list-group-item bg-dark text-white">
+                            {{ screening.cinema.name }} - {{ screening.date_time }}
+                            <a href="{% url 'book_ticket' screening.id %}" class="btn btn-primary btn-sm float-end">Book Ticket</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No screenings available.</p>
+            {% endif %}
+        </div>
+    </div>
 
-    <h2>Add your review</h2>
-    <form method="post" action="{% url 'add_review' movie.id %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Submit Review</button>
-    </form>
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Reviews</h2>
+            {% if reviews %}
+                <ul class="list-group">
+                    {% for review in reviews %}
+                        <li class="list-group-item bg-dark text-white">
+                            <strong>{{ review.user.username }}</strong> rated it {{ review.rating }}/10
+                            <p>{{ review.comment }}</p>
+                            <p><em>{{ review.created_at }}</em></p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No reviews available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Recommended Movies</h2>
+            {% if recommended_movies %}
+                <div class="row">
+                    {% for recommended_movie in recommended_movies %}
+                        <div class="col-md-3">
+                            <div class="card bg-dark text-white mb-3">
+                                <a href="{% url 'movie_detail' recommended_movie.id %}">
+                                    <img src="{{ base_image_url }}{{ recommended_movie.image }}" class="card-img-top" alt="{{ recommended_movie.title }}">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">{{ recommended_movie.title }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No recommendations available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Add Your Review</h2>
+            <form method="post" action="{% url 'add_review' movie.id %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="ticket-button">Submit Review</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

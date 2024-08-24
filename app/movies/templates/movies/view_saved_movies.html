@@ -1,16 +1,25 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Saved Movies</h1>
-{% if saved_movies %}
-    <ul>
-        {% for saved_movie in saved_movies %}
-            <li>
-                <a href="{% url 'movie_detail' saved_movie.movie.id %}">{{ saved_movie.movie.title }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>You have not saved any movies yet.</p>
-{% endif %}
+<div class="container">
+    <h1 class="mb-4">Saved Movies</h1>
+    {% if saved_movies %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for saved_movie in saved_movies %}
+                <div class="col">
+                    <div class="card bg-dark text-white h-100">
+                        <a href="{% url 'movie_detail' saved_movie.movie.id %}">
+                            <img src="{{ base_image_url }}{{ saved_movie.movie.image }}" class="card-img-top" alt="{{ saved_movie.movie.title }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'movie_detail' saved_movie.movie.id %}" class="text-white text-decoration-none">{{ saved_movie.movie.title }}</a></h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>You have not saved any movies yet.</p>
+    {% endif %}
+</div>
 {% endblock %}
