@@ -26,10 +26,10 @@ class CartItem(models.Model):
     
     @property
     def get_ticket_price(self):
-        return self.ticket.ticket_type.pricec
+        return self.ticket.ticket_type.price
     
     @property
-    def get_qunaity(self):
+    def get_quantity(self):
         return self.quantity
 
     class Meta:

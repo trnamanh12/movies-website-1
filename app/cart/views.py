@@ -46,4 +46,6 @@ def checkout(request):
     payment.save()
     # Clear the cart after payment
     total_amount = cart.get_total_amount
+    CartItem.objects.filter(cart=cart).delete()
+    Cart.objects.filter(user=request.user).delete()
     return render(request, 'cart/checkout_success.html', {'payment': payment, 'total_amount': total_amount})
