@@ -6,48 +6,73 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #440e0e;
-            font-family: 'Roboto', sans-serif;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
             margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
         }
         header {
-            background-color: #ffce00;
-            color: black;
-            padding: 10px;
-            text-align: center;
+            background-color: #007bff;
+            color: #fff;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         nav ul {
             list-style: none;
             padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
         }
         nav ul li {
-            display: inline;
-            margin-right: 10px;
+            margin: 0 20px;
         }
         nav ul li a {
-            color: black;
+            color: #fff;
             text-decoration: none;
             font-weight: bold;
+            font-size: 16px;
+            padding: 5px 10px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            border-radius: 4px;
         }
         nav ul li a:hover {
-            text-decoration: underline;
+            background-color: #0056b3;
+            color: #ffce00;
         }
         .container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
         }
-        footer {
-            background-color: #333;
-            color: #fff;
+        .container h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #007bff;
             text-align: center;
-            padding: 10px;
+        }
+        .btn-primary {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -62,10 +87,8 @@
         </nav>
     </header>
     <div class="container">
-        {% block content %}{% endblock %}
+        {% block content %}
+        {% endblock %}
     </div>
-    <footer>
-        <p>&copy; 2023 Movie Cart. All rights reserved.</p>
-    </footer>
 </body>
 </html>
