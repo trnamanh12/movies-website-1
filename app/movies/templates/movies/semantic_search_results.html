@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Semantic Search Results</h1>
+    {% if movies %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for movie in movies %}
+                <div class="col">
+                    <div class="card bg-dark text-white h-100">
+                        <a href="{% url 'movie_detail' movie.id %}">
+                            <img src="{{ base_image_url }}{{ movie.image }}" class="card-img-top" alt="{{ movie.title }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'movie_detail' movie.id %}" class="text-white text-decoration-none">{{ movie.title }}</a></h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No movies found matching your query.</p>
+    {% endif %}
+</div>
+{% endblock %}
