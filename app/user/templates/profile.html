@@ -1,10 +1,18 @@
 {% extends 'base_user.html' %}
 
+{% block title %}Profile{% endblock %}
+
 {% block content %}
-<h2>Profile</h2>
-<p>Email: {{ user.email }}</p>
-<p>Username: {{ user.username }}</p>
-<p>Phone Number: {{ user.phone_number }}</p>
-<a href="{% url 'edit_profile' %}">Edit Profile</a>
-<a href="{% url 'delete_account' %}">Delete Account</a>
+<div class="profile-container">
+    <h2>Your Profile</h2>
+    <div class="profile-details">
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+    </div>
+    <div class="profile-actions">
+        <a href="{% url 'edit_profile' %}" class="btn-primary">Edit Profile</a>
+        <a href="{% url 'delete_account' %}" class="btn-danger">Delete Account</a>
+    </div>
+</div>
 {% endblock %}

@@ -1,12 +1,17 @@
 {% extends 'base_user.html' %}
+
+{% block title %}Login{% endblock %}
+
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-    {% csrf_token %}
-    <label for="username">Username:</label>
-    <input type="text" name="username" required>
-    <label for="password">Password:</label>
-    <input type="password" name="password" required>
-    <button type="submit">Login</button>
-</form>
+<div class="login-container">
+    <h2>Login to Your Account</h2>
+    <form method="post" class="login-form">
+        {% csrf_token %}
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        <button type="submit" class="btn-primary">Login</button>
+    </form>
+</div>
 {% endblock %}
