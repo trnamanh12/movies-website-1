@@ -13,9 +13,10 @@ urlpatterns = [
     
     # Ticket booking URLs
     path('screenings/<int:screening_id>/book/', views.book_ticket, name='book_ticket'),  # Book a ticket for a specific screening
-    # path('booking-confirmation/<int:ticket_id>/', views.booking_confirmation, name='booking_confirmation'),  # Display booking confirmation for a specific ticket
+    path('booking-confirmation/<int:ticket_id>/', views.booking_confirmation, name='booking_confirmation'),  # Display booking confirmation for a specific ticket
 
     path('search/', views.search, name='search'),  # Search for movies and cinemas
+    path('semantic_search/', views.semantic_search_view, name='semantic_search'),  # Search for movies using semantic search
 
     path('save_movie/<int:movie_id>/', views.save_movie, name='save_movie'),  # Save a movie to the user's watchlist
     path('viewing_history/', views.viewing_history, name='viewing_history'),  # Display the user's viewing history
