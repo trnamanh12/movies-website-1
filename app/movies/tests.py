@@ -10,17 +10,16 @@ class MovieViewsTestCase(TestCase):
         self.client = Client()
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.movie = Movie.objects.create(title='Test Movie', vote_average=8.5)
-        self.movie4_test_booking = Movie.objects.create(title='Test Movie 1', vote_average=8.5)
+        self.movie_for_test_booking = Movie.objects.create(title='Test Movie 1', vote_average=8.5)
 
         self.cinema = Cinema.objects.create(name='Test Cinema', address='Test Address')
-        self.cinema4_test_booking = Cinema.objects.create(name='Test Cinema 1', address='Test Address 1')
+        self.cinema_for_test_booking = Cinema.objects.create(name='Test Cinema 1', address='Test Address 1')
 
         self.screening = Screening.objects.create(movie=self.movie, cinema=self.cinema, date_time=timezone.now())
         self.ticket_type = TicketType.objects.create(name='Test Ticket Type', price=10)
         self.ticket = Ticket.objects.create(screening=self.screening, ticket_type=self.ticket_type, user=self.user)
+        self.screening_for_test_booking = Screening.objects.create(movie=self.movie_for_test_booking, cinema=self.cinema_for_test_booking, date_time=timezone.now())
         self.client.login(username='testuser', password='testpassword')
-
-        self.screening_for_test_booking = Screening.objects.create(movie=self.movie4_test_booking, cinema=self.cinema4_test_booking, date_time=timezone.now())
 
     def test_home_view(self):
         response = self.client.get(reverse('home'))
