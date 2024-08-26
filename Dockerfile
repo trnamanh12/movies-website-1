@@ -11,12 +11,18 @@ WORKDIR /app
 COPY ./requirements.txt /tmp/requirements.txt
 
 # Install dependencies
-RUN pip install -r /tmp/requirements.txt && \
+RUN apt-get update && apt-get install -y \
+    gcc \
+    graphviz \
+    libgraphviz-dev \
+    pkg-config && \
+    mkdir -p /tmp && \
+    chmod 1777 /tmp && \
+    pip install -r /tmp/requirements.txt && \
     pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu && \
-    rm -rf /tmp 
+    rm -rf /tmp
 
 
-    # apt-get update && apt-get install -y postgresql-client
 
 
 # Copy the Django project

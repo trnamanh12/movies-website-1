@@ -9,3 +9,5 @@ pandas
 scikit-learn
 faiss-cpu
 transformers
+django-extensions
+pygraphviz
