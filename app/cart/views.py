@@ -42,10 +42,24 @@ def checkout(request):
     payment = Payment.objects.create(user=request.user, cart=cart, status='Pending')
     # Simulate payment processing
     # messages.info(request, 'Payment processing...')
-    payment.status = 'Completed'  # Simulating a successful payment
+    payment.status = 'Completed'  
     payment.save()
     # Clear the cart after payment
     total_amount = cart.get_total_amount
     CartItem.objects.filter(cart=cart).delete()
-    Cart.objects.filter(user=request.user).delete()
+    # Cart.objects.filter(user=request.user).delete()
     return render(request, 'cart/checkout_success.html', {'payment': payment, 'total_amount': total_amount})
+
+@login_required
+def update_cart_item_quantity(request, item_id):
+    if request.method == 'POST':
+        cart_item = CartItem.objects.get(id=item_id)
+        new_quantity = int(request.POST.get('quantity', 1))
+        if new_quantity > 0:
+            cart_item.quantity = new_quantity
+            cart_item.save()
+        else:
+            cart_item.delete()
+        return redirect('view_cart')
+    else:
+        return HttpResponse(status=405)  
