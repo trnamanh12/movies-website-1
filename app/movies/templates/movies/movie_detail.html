@@ -91,7 +91,7 @@
             {% endif %}
         </div>
     </div>
-
+    {% if user.is_authenticated %}
     <div class="row mb-4">
         <div class="col-12">
             <h2>Add Your Review</h2>
@@ -102,5 +102,6 @@
             </form>
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}

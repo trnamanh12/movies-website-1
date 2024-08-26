@@ -46,7 +46,7 @@ def user_login(request):
         user = authenticate(request, username=username,password=password)
         if user is not None:
             login(request, user)
-            return redirect('profile')
+            return redirect('home')
         else:
             messages.error(request, 'Invalid username or password.')
     return render(request, 'login.html')
