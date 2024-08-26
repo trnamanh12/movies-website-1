@@ -1,12 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<h1>Cinemas</h1>
-<ul>
-    {% for cinema in cinemas %}
-    <li><a href="{% url 'cinema_detail' cinema.id %}">{{ cinema.name }}</a></li>
-    {% empty %}
-    <li>No cinemas available.</li>
-    {% endfor %}
-</ul>
+<div class="container mt-5">
+    <h1 class="mb-4">Cinemas</h1>
+    {% if cinemas %}
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for cinema in cinemas %}
+                <div class="col">
+                    <div class="card bg-dark text-white h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'cinema_detail' cinema.id %}" class="text-white text-decoration-none">{{ cinema.name }}</a>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <img src="{% static 'cinema_image/AI_generated_cinema_image.webp' %}"  class="cinema-image">
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            No cinemas available.
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

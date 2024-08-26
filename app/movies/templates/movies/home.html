@@ -1,26 +1,33 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<h1>Welcome to the Movie Booking System</h1>
-<p>Discover and book tickets for your favorite movies at the best cinemas in town.</p>
-<h2>Featured Movies</h2>
-<div class="featured-movies">
+<h1 class="text-center">Welcome to the Movie Booking System</h1>
+<p class="text-center">Discover and book tickets for your favorite movies at the best cinemas.</p>
+<h2 class="mt-5">Featured Movies</h2>
+<div class="row">
     {% for movie in featured_movies %}
-    <div class="movie-item">
-        <h3><a href="{% url 'movie_detail' movie.id %}">{{ movie.title }}</a></h3>
-        <img src="{{ base_image_url }}{{ movie.image }}" alt="{{ movie.title }}" width="200">
-        <p>Release Year: {{ movie.release_date.year }}</p>
-        <p>Rating: {{ movie.vote_average }}</p>
+    <div class="col-md-4 mb-4">
+        <div class="card bg-dark text-white">
+            <img src="{{ base_image_url }}{{ movie.image }}" class="card-img-top" alt="{{ movie.title }}">
+            <div class="card-body">
+                <h5 class="card-title"><a href="{% url 'movie_detail' movie.id %}" class="text-white">{{ movie.title }}</a></h5>
+                <p class="card-text">Release Year: {{ movie.release_date.year }}</p>
+                <p class="card-text">Rating: {{ movie.vote_average }}</p>
+            </div>
+        </div>
     </div>
     {% empty %}
     <p>No featured movies available.</p>
     {% endfor %}
 </div>
-<h2>Top Cinemas</h2>
-<ul>
+<h2 class="mt-5">Top Cinemas</h2>
+<ul class="list-group list-group-flush">
     {% for cinema in top_cinemas %}
-    <li><a href="{% url 'cinema_detail' cinema.id %}">{{ cinema.name }}</a></li>
+    <li class="list-group-item bg-dark text-white"><a href="{% url 'cinema_detail' cinema.id %}" class="text-white">{{ cinema.name }}</a></li>
     {% empty %}
-    <li>No cinemas available.</li>
+    <li class="list-group-item bg-dark text-white">No cinemas available.</li>
     {% endfor %}
+    <img src="{% static 'cinema_image/AI_generated_regal_cinema.webp' %}" alt="{{ cinema.name }}" class="cinema-image">
 </ul>
 {% endblock %}

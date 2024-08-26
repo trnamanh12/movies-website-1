@@ -9,51 +9,42 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: black;
-            background-image: url('https://www.transparenttextures.com/patterns/black-paper.png');
-            background-attachment: fixed;
-            color: white;
-            font-family: 'Roboto', sans-serif; /* Using Roboto font */
+            background-color: #1c1c1c;
+            color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
             min-height: 100vh;
         }
 
         header nav ul {
-            background-color: rgba(45, 45, 45, 0.8);
+            background-color: #343a40;
             list-style: none;
-            padding: 10px 20px;
+            padding: 15px 30px;
             text-align: center;
+            border-bottom: 2px solid #e94560;
         }
 
         header nav ul li {
             display: inline-block;
-            margin: 0 15px;
+            margin: 0 20px;
         }
 
         header nav ul li a {
-            color: white;
+            color: #f8f9fa;
             font-size: 18px;
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         header nav ul li a:hover {
-            color: #ffce00;
+            color: #e94560;
         }
-
-
-        .-bar-container input[type="text"]:focus {
-            background-color: rgba(255, 255, 255, 0.2);
-            outline: none;
-        }
-
-
 
         .messages {
             list-style: none;
-            padding: 10px;
-            margin: 0 auto;
+            padding: 15px;
+            margin: 20px auto;
             max-width: 600px;
-            background-color: rgba(51, 51, 51, 0.8);
+            background-color: #212529;
             border-radius: 5px;
         }
 
@@ -62,16 +53,12 @@
             border-bottom: 1px solid #444;
         }
 
-        .messages li:last-child {
-            border-bottom: none;
-        }
-
         .ticket-button {
             background-color: #e94560;
             border: none;
             padding: 10px 20px;
             font-size: 18px;
-            font-family: 'Georgia', serif;
+            font-family: 'Roboto', sans-serif;
             color: white;
             cursor: pointer;
             border-radius: 5px;
@@ -81,6 +68,42 @@
         .ticket-button:hover {
             background-color: #ffce00;
             color: black;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .search-input {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+
+        .search-button {
+            margin-right: 10px;
+            padding: 5px 15px;
+            border-radius: 5px;
+            background-color: #e94560;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .search-button:hover {
+            background-color: #ffce00;
+            color: black;
+        }
+        .cinema-image {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -92,6 +115,7 @@
                 <li><a href="{% url 'movie_list' %}">Movies</a></li>
                 <li><a href="{% url 'cinema_list' %}">Cinemas</a></li>
                 {% if user.is_authenticated %}
+                    <li><a href="{% url 'rating_history' %}" >Rating History</a></li>
                     <li><a href="{% url 'view_cart' %}">Cart</a></li>
                     <li><a href="{% url 'profile' %}">Profile</a></li>
                     <li><a href="{% url 'viewing_history' %}">History</a></li>
@@ -102,22 +126,25 @@
                             <button type="submit" class="ticket-button">Logout</button>
                         </form>
                     </li>
-                 {% else %}
+                {% else %}
                     <li><a href="{% url 'login' %}">Login</a></li>
                     <li><a href="{% url 'register' %}">Register</a></li>
                 {% endif %}
                 <li>
-                    <form class="search-form" method="get" action="{% url 'search' %}">
+                    <form class="search-form" method="get" action="{% url 'search' %}" id="search-form">
                         <input type="text" name="q" placeholder="Search..." class="search-input">
+                        <select name="search_type" id="search-type" class="search-input">
+                            <option value="normal">Normal Search</option>
+                            <option value="semantic">Semantic Search</option>
+                        </select>
                         <button type="submit" class="search-button">Search</button>
                     </form>
                 </li>
             </ul>
         </nav>
     </header>
-    
 
-    <main>
+    <main class="container mt-5">
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -125,10 +152,18 @@
             {% endfor %}
         </ul>
         {% endif %}
-
-        {% block content %}
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            const searchType = document.getElementById('search-type').value;
+            if (searchType === 'semantic') {
+                this.action = "{% url 'semantic_search' %}";
+            } else {
+                this.action = "{% url 'search' %}";
+            }
+        });
+    </script>
 </body>
 </html>

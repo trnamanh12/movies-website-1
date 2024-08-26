@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1 class="text-center mb-4">Rating History</h1>
+    <div class="list-group">
+      {% for review in user_reviews %}
+        <div class="list-group-item list-group-item-action flex-column align-items-start bg-dark text-white">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{ review.movie.title }}</h5>
+            <small>{{ review.created_at }}</small>
+          </div>
+          <p class="mb-1">{{ review.get_comment }}</p>
+          <small>Rating: {{ review.get_rating }}</small>
+        </div>
+      {% empty %}
+        <div class="list-group-item list-group-item-action flex-column align-items-start bg-dark text-white">
+          <p class="mb-1">You have not reviewed any movies yet.</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

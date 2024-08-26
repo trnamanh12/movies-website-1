@@ -7,7 +7,5 @@ psycopg==3.2.1
 psycopg-binary==3.2.1
 pandas
 scikit-learn
-djangorestframework
-markdown       # Markdown support for the browsable API.
-django-filter  # Filtering support
-django-extensions
+faiss-cpu
+transformers

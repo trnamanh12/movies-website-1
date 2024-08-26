@@ -1,84 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Cart</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            background-color: #281212;
-            font-family: 'Roboto', sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 80%;
-            max-width: 600px;
-        }
-        h1 {
-            text-align: center;
-            color: #444;
-        }
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        .cart-item p {
-            margin: 0;
-        }
-        .cart-item a {
-            color: #e74c3c;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .cart-item a:hover {
-            text-decoration: underline;
-        }
-        .total {
-            text-align: right;
-            font-size: 1.2em;
-            margin-top: 20px;
-        }
-        .checkout {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #27ae60;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .checkout:hover {
-            background-color: #2ecc71;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Your Cart</h1>
-        {% for item in cart_items %}
-            <div class="cart-item">
-                <p>{{ item.ticket }} - Quantity: {{ item.quantity }} - Price: {{ item.ticket.ticket_type.price }}</p>
-                <a href="{% url 'remove_from_cart' item.id %}">Remove</a>
-            </div>
-        {% endfor %}
-        <p class="total">Total: {{ total_amount }}</p>
-        <a class="checkout" href="{% url 'checkout' %}">Proceed to Checkout</a>
+{% extends 'cart/base_cart.html' %}
+
+{% block title %}View Cart{% endblock %}
+
+{% block extra_css %}
+<style>
+    .cart-item {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+    }
+    .cart-item h3 {
+        margin-top: 0;
+    }
+    .btn {
+        display: inline-block;
+        padding: 8px 15px;
+        background-color: #333;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+    .btn-remove {
+        background-color: #ff4444;
+    }
+    .btn-primary {
+        background-color: #4CAF50;
+    }
+    .total {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 20px 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Your Cart</h1>
+
+{% if cart_items %}
+    {% for item in cart_items %}
+        <div class="cart-item">
+            <h3>{{ item.ticket }}</h3>
+            <p>Price: ${{ item.ticket.ticket_type.price }}</p>
+            <form method="post" action="{% url 'update_cart_item_quantity' item.id %}">
+                {% csrf_token %}
+                <label for="quantity-{{ item.id }}">Quantity:</label>
+                <input type="number" id="quantity-{{ item.id }}" name="quantity" value="{{ item.quantity }}" min="1">
+                <button type="submit" class="btn">Update</button>
+            </form>
+            <p>Total price: ${{ item.get_total_price }}</p>
+            <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-remove">Remove</a>
+        </div>
+    {% endfor %}
+    
+    <div class="total">
+        Total: ${{ total_amount }}
     </div>
-</body>
-</html>
+    
+    <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
+{% endblock %}

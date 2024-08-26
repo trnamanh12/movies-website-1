@@ -8,13 +8,15 @@ from random import sample
 from cart.views import add_to_cart
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
+from .utilss import semantic_search
+
 
 def home(request : 'HttpRequest') -> 'HttpResponse':
     # Get top 100 movies with the highest vote_average
-    top_movies = Movie.objects.order_by('-vote_average')[:100]
+    top_movies = Movie.objects.order_by('-vote_average')[:1000]
 
     # Get random movies from top 100 movies
-    top_movies = sample(list(top_movies), min(len(top_movies), 10))
+    top_movies = sample(list(top_movies), min(len(top_movies), 18))
     base_image_url = 'https://image.tmdb.org/t/p/w500'
 
     # Get all cinemas and select 10 random ones
@@ -119,8 +121,10 @@ def book_ticket(request: 'HttpRequest', screening_id: int) -> 'HttpResponse':
             ticket.screening = screening
             ticket.user = request.user
             ticket.save()
+            # messages.success(request, "Ticket booked successfully.")
+            # return redirect('add_to_cart', ticket.id)
             add_to_cart(request, ticket.id)  # Add ticket to cart
-            return render(request, 'movies/booking_confirmation.html', {'ticket': ticket})  # Render booking confirmation
+            return redirect( 'booking_confirmation', ticket.id)
         else:
             messages.error(request, "There was an error in your submission. Please correct the highlighted fields.")
     else:
@@ -131,10 +135,10 @@ def book_ticket(request: 'HttpRequest', screening_id: int) -> 'HttpResponse':
         'screening': screening,
     })
 
-# @login_required
-# def booking_confirmation(request: 'HttpRequest', ticket_id: int) -> 'HttpResponse':
-#     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-#     return render(request, 'movies/booking_confirmation.html', {'ticket': ticket})
+@login_required
+def booking_confirmation(request: 'HttpRequest', ticket_id: int) -> 'HttpResponse':
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+    return render(request, 'movies/booking_confirmation.html', {'ticket': ticket})
 
 def search(request: 'HttpRequest') -> 'HttpResponse':
     query = request.GET.get('q')
@@ -143,19 +147,24 @@ def search(request: 'HttpRequest') -> 'HttpResponse':
     base_image_url = 'https://image.tmdb.org/t/p/w500'
     return render(request, 'movies/search_results.html', {'movies': movies, 'cinemas': cinemas, 'base_image_url': base_image_url})
 
+def semantic_search_view(request: 'HttpRequest') -> 'HttpResponse':
+    if request.method == 'GET':
+        query = request.GET.get('q')
+        results = semantic_search(query)
+        movies = Movie.objects.filter(title__in=results)
+        movie_base_url = 'https://image.tmdb.org/t/p/w500'
+    return render(request, 'movies/semantic_search_results.html', {'movies': movies, 'base_image_url': movie_base_url})
+
 @login_required
 def save_movie(request, movie_id):
     movie = get_object_or_404(Movie, id=movie_id)
     if request.method == 'POST':
-        saved_movie, created = UserHistory.objects.update_or_create(
+        _ , _ = UserHistory.objects.update_or_create(
             user=request.user,
             movie=movie,
             defaults={'saved': True}
         )
-        if created:
-            messages.success(request, f"{movie.title} has been saved to your list.")
-        else:
-            messages.info(request, f"{movie.title} is already in your saved list.")
+    messages.success(request, "Movie saved successfully.")
     return redirect('movie_detail', movie_id=movie_id)
 
 
@@ -170,9 +179,16 @@ def record_movie_history(request, movie):
 @login_required
 def viewing_history(request):
     user_histories = UserHistory.objects.filter(user=request.user).order_by('-last_watched')
-    return render(request, 'movies/viewing_history.html', {'user_histories': user_histories})
+    base_image_url = 'https://image.tmdb.org/t/p/w500'
+    return render(request, 'movies/viewing_history.html', {'user_histories': user_histories, 'base_image_url': base_image_url})
 
 @login_required
 def view_saved_movies(request):
     saved_movies = UserHistory.objects.filter(user=request.user, saved=True)
-    return render(request, 'movies/view_saved_movies.html', {'saved_movies': saved_movies})
+    base_image_url = 'https://image.tmdb.org/t/p/w500'
+    return render(request, 'movies/view_saved_movies.html', {'saved_movies': saved_movies, 'base_image_url': base_image_url})
+
+@login_required
+def rating_history(request):
+    user_reviews = Review.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'movies/rating_history.html', {'user_reviews': user_reviews})

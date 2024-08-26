@@ -1,10 +1,14 @@
 {% extends 'base_user.html' %}
 
+{% block title %}Edit Profile{% endblock %}
+
 {% block content %}
-<h2>Edit Profile</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save Changes</button>
-</form>
+<div class="edit-profile-container">
+    <h2>Edit Your Profile</h2>
+    <form method="post" class="edit-profile-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-primary">Save Changes</button>
+    </form>
+</div>
 {% endblock %}

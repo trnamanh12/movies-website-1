@@ -1,12 +1,16 @@
 {% extends 'base_user.html' %}
 
+{% block title %}Delete Account{% endblock %}
+
 {% block content %}
-<h2>Delete Account</h2>
-<p>Are you sure you want to delete your account? This action cannot be undone.</p>
-<form method="post">
-    {% csrf_token %}
-    <label for="password">Enter your password to confirm:</label>
-    <input type="password" name="password" required>
-    <button type="submit">Delete Account</button>
-</form>
+<div class="delete-account-container">
+    <h2>Delete Account</h2>
+    <p class="warning-text">Are you sure you want to delete your account? This action cannot be undone.</p>
+    <form method="post" class="delete-account-form">
+        {% csrf_token %}
+        <label for="password">Enter your password to confirm:</label>
+        <input type="password" name="password" required>
+        <button type="submit" class="btn-danger">Delete Account</button>
+    </form>
+</div>
 {% endblock %}

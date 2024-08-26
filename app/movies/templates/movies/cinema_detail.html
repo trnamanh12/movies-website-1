@@ -1,18 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{{ cinema.name }}</h1>
-<p>Address: {{ cinema.address }}</p>
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4">{{ cinema.name }}</h1>
+            <p class="lead"><strong>Address:</strong> {{ cinema.address }}</p>
+        </div>
+    </div>
 
-<h2>Screenings</h2>
-<ul>
-    {% for screening in screenings %} 
-    <li>
-        {{ screening.movie.title }} - {{ screening.date_time }}
-        <a href="{% url 'book_ticket' screening.id %}">Book Ticket</a> <!--This is a Django template tag that generates a URL for the book_ticket view. -->
-    </li>
-    {% empty %}  
-    <li>No screenings available.</li>
-    {% endfor %}
-</ul>
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="h3">Screenings</h2>
+            {% if screenings %}
+                <ul class="list-group">
+                    {% for screening in screenings %}
+                        <li class="list-group-item bg-dark text-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>{{ screening.movie.title }} - {{ screening.date_time }}</span>
+                                <a href="{% url 'book_ticket' screening.id %}" class="btn btn-primary btn-sm">Book Ticket</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No screenings available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

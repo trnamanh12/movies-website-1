@@ -1,8 +1,11 @@
 .venv/
 __pycache__/
-data/
 jstest/
 
 app/dump.json
 storage/
-cinema_image/
+.idea/
+experiment/
+app/staticfiles/
+*.ipynb
+*.pyc

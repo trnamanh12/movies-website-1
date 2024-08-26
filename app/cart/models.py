@@ -7,13 +7,16 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
+    def get_user(self):
+        return self.user
+    
+    @property
     def get_total_amount(self):
         return sum(item.ticket.ticket_type.price * item.quantity for item in CartItem.objects.filter(cart=self))
 
-
     def __str__(self):
         return f"Cart of {self.user.username}"
-    
+        
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
@@ -26,12 +29,16 @@ class CartItem(models.Model):
     
     @property
     def get_ticket_price(self):
-        return self.ticket.ticket_type.pricec
+        return self.ticket.ticket_type.price
     
     @property
-    def get_qunaity(self):
+    def get_quantity(self):
         return self.quantity
 
+    @property
+    def get_total_price(self):
+        return self.get_ticket_price * self.get_quantity
+    
     class Meta:
         unique_together = ('cart', 'ticket')
 
@@ -45,14 +52,14 @@ class Payment(models.Model):
     def __str__(self):
         return f"Payment of {self.bill} by {self.user.username} - {self.status}"
     
-    # @property
-    # def is_cancelled(self):
-    #     return self.status == 'Cancelled'
-
-    # @property
-    # def is_completed(self):
-    #     return self.status == 'Completed'
-
+    @property
+    def get_user(self):
+        return self.user
+    
     @property
     def bill(self):
         return self.cart.get_total_amount
+
+    @property
+    def get_cart(self):
+        return self.cart
