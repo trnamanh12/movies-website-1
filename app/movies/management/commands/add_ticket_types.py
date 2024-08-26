@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from app.movies.models import TicketType
+from movies.models import TicketType
 
 class Command(BaseCommand):
     help = 'Add ticket types to the database'
