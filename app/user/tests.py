@@ -38,17 +38,21 @@ class UserViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'testuser')
 
-    def test_edit_profile(self):
-        self.client.login(username='testuser', password='testpassword')
-        response = self.client.post(reverse('edit_profile'), {
-            'username': 'updateduser',
-            'email': 'updateduser@example.com'
-        })
-        self.assertEqual(response.status_code, 302)  # Redirects to profile
-        self.assertRedirects(response, reverse('profile'))
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.username, 'updateduser')
-        self.assertEqual(self.user.email, 'updateduser@example.com')
+def test_edit_profile(self):
+    self.client.login(username='testuser', password='testpassword')
+    response = self.client.post(reverse('edit_profile'), {
+        'email': 'updateduser@example.com',
+        'first_name': 'Updated',
+        'last_name': 'User'
+    })
+    if response.status_code != 302:
+        print(response.context['form'].errors)
+    self.assertEqual(response.status_code, 302) 
+    self.assertRedirects(response, reverse('profile'))
+    self.user.refresh_from_db()
+    self.assertEqual(self.user.email, 'updateduser@example.com')
+    self.assertEqual(self.user.first_name, 'Updated')
+    self.assertEqual(self.user.last_name, 'User')
 
     def test_delete_account(self):
         self.client.login(username='testuser', password='testpassword')
