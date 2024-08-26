@@ -1,6 +1,8 @@
 from django.db import models
+from django.utils import timezone
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.core.exceptions import ValidationError
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -81,19 +83,25 @@ class Cinema(models.Model):
 
 class Screening(models.Model):
     """
-    table to store movie screenings:
+    Table to store movie screenings:
     - movie: FK to Movie
     - cinema: FK to Cinema
     - date_time: datetime of the screening
-    - time: time of the screening
     """
-    # id = models.AutoField(primary_key=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='screenings')
     cinema = models.ForeignKey(Cinema, on_delete=models.CASCADE, related_name='screenings')
     date_time = models.DateTimeField()
-    
+
     def __str__(self):
         return f"{self.movie.title} at {self.cinema.name} - {self.date_time}"
+
+    def clean(self):
+        if self.date_time < timezone.now():
+            raise ValidationError('Screening date and time must be in the future.')
+
+    class Meta:
+        ordering = ['date_time']
+        unique_together = ('movie', 'cinema', 'date_time')
 
 class TicketType(models.Model):
     name = models.CharField(max_length=100)

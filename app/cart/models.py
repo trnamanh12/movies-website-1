@@ -7,6 +7,10 @@ class Cart(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
+    def get_user(self):
+        return self.user
+    
+    @property
     def get_total_amount(self):
         return sum(item.ticket.ticket_type.price * item.quantity for item in CartItem.objects.filter(cart=self))
 
@@ -49,5 +53,13 @@ class Payment(models.Model):
         return f"Payment of {self.bill} by {self.user.username} - {self.status}"
     
     @property
+    def get_user(self):
+        return self.user
+    
+    @property
     def bill(self):
         return self.cart.get_total_amount
+
+    @property
+    def get_cart(self):
+        return self.cart
