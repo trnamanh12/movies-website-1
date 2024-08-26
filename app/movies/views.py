@@ -188,4 +188,7 @@ def view_saved_movies(request):
     base_image_url = 'https://image.tmdb.org/t/p/w500'
     return render(request, 'movies/view_saved_movies.html', {'saved_movies': saved_movies, 'base_image_url': base_image_url})
 
-
+@login_required
+def rating_history(request):
+    user_reviews = Review.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'movies/rating_history.html', {'user_reviews': user_reviews})

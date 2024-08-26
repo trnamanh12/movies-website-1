@@ -21,4 +21,5 @@ urlpatterns = [
     path('save_movie/<int:movie_id>/', views.save_movie, name='save_movie'),  # Save a movie to the user's watchlist
     path('viewing_history/', views.viewing_history, name='viewing_history'),  # Display the user's viewing history
     path('view_saved_movies/', views.view_saved_movies, name='view_saved_movies'),  # Display the user's saved movies
+    path('rating-history/', views.rating_history, name='rating_history'),  # Display the user's rating history
 ]
