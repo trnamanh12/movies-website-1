@@ -19,7 +19,7 @@ class Movie(models.Model):
     revenue = models.DecimalField(max_digits=14, decimal_places=1, default=0.0)
     overview = models.TextField(default='')
     image = models.URLField(max_length=200, default='')
-    genres = models.CharField(max_length=200, default='')
+    # genres = models.CharField(max_length=200, default='')
     # keywords = models.CharField(max_length=200, default='')
     trailer = models.URLField(max_length=200, default='')
     
