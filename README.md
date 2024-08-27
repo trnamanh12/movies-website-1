@@ -11,10 +11,13 @@ Then run:
 ```
 docker compose up --build
 ```
-`app/data/` contain data for database and index for semantic search.
-`app/model_rm/`  contain recommendation model.
-`app/movies/` contain movie-related functionality.
-`app/user/` contain user-related functionality. 
-`app/cart` contain shopping cart functionality.
-`app/mysite/`: Django project settings and configurations.
+
+### Project Structure:
+
+- `app/data/` contain data for database and index for semantic search.
+- `app/model_rm/`  contain recommendation model.
+- `app/movies/` contain movie-related functionality.
+- `app/user/` contain user-related functionality. 
+- `app/cart` contain shopping cart functionality.
+- `app/mysite/`: Django project settings and configurations.
 
