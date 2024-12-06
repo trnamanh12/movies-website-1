@@ -21,4 +21,3 @@ docker compose up --build
 - `app/cart` contain shopping cart functionality.
 - `app/mysite/`: Django project settings and configurations.
 
-Result of training matrix factorization model: https://docs.google.com/document/d/1CWXygefeisjyPGKzCUKFV9t4Q7OtQMi_vWykcMBbDGs/edit?usp=sharing 
